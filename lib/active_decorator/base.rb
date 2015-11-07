@@ -1,5 +1,5 @@
-module ActiveDecorator
-  class BaseDecorator
+module ActivePresenter
+  class Base
     attr_accessor :model
 
     def initialize(model)
