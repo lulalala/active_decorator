@@ -1,33 +1,22 @@
-# ActiveDecorator [![Build Status](https://travis-ci.org/amatsuda/active_decorator.svg?branch=master)](https://travis-ci.org/amatsuda/active_decorator) [![Code Climate](https://codeclimate.com/github/amatsuda/active_decorator/badges/gpa.svg)](https://codeclimate.com/github/amatsuda/active_decorator)
+# LulalalaPresenter - forked from ActiveDecorator
 
-A simple and Rubyish view helper for Rails 3 and Rails 4. Keep your helpers and views Object-Oriented!
+...where you can put your view helpers if they are **very closely** related to ActiveModel.
 
+This solves one very important computer science problem: naming your helper methods. All great programmers feels uneasy seeing:
 
-## Features ##
+* `auction_title(@auction)`
+* `board_title(@board)`
+* `category_title(@category)`
 
-1. automatically mixes decorator module into corresponding model only when:
-  1. passing a model or collection of models or an instance of ActiveRecord::Relation from controllers to views
-  2. rendering partials with models (using `:collection` or `:object` or `:locals` explicitly or implicitly)
-2. the decorator module runs in the model's context. So, you can directly call any attributes or methods in the decorator module
-3. since decorators are considered as sort of helpers, you can also call any ActionView's helper methods such as `content_tag` or `link_to`
-
-
-## Supported versions ##
-
-Rails 3.0.x, 3.1.x, 3.2.x, 4.0.x, 4.1.x, 4.2.x, and 5.0 (edge)
-
-
-## Supported ORMs ##
-
-ActiveRecord, ActiveResource, and any kind of ORMs that uses Ruby Objects as model objects
+and this gem will solve it.
 
 
 ## Usage ##
 
-1. bundle 'active_decorator' gem
-2. create a decorator module for each AR model. For example, a decorator for a model `User` should be named `UserDecorator`.
-You can use the generator for doing this ( `% rails g decorator user` )
-3. Then it's all done. Without altering any single line of the existing code, the decorator modules will be automatically mixed into your models only in the view context.
+1. put `gem 'lulalala_presenter', github:'lulalala/lulalala_presenter'` in Gemfile and then `bundle install`.
+2. create a presenter class for each AR model you wish to present. For example, a decorator for a model `User` should be named `UserPresenter`.
+3. access this presenter from the model like this: `record.presenter`, and from there call the helper methods.
+2. call any ActionView's helper methods using `h`, e.g. `h.content_tag` or `h.link_to`.
 
 
 ## Examples ##
@@ -38,14 +27,14 @@ class User < ActiveRecord::Base
   # first_name:string last_name:string website:string
 end
 
-# app/decorators/user_decorator.rb
-module UserDecorator
+# app/presenters/user_presenter.rb
+module UserPresenter < LulalalaPresenter::Base
   def full_name
-    "#{first_name} #{last_name}"
+    "#{model.first_name} #{model.last_name}"
   end
 
   def link
-    link_to full_name, website
+    h.link_to model.full_name, model.website
   end
 end
 
@@ -59,65 +48,16 @@ end
 ```erb
 # app/views/users/index.html.erb
 <% @users.each do |user| %>
-  <%= user.link %><br>
+  <%= user.presenter.link %><br>
 <% end %>
 ```
 
-## Decorating associated objects ##
+## Reason for fork ##
 
-ActiveDecorator *does not* automatically decorate associated objects. We recommend that you pass associated objects to `render` when decorated associated objects are needed.
+It's difficult to decorate models automatically. Leaky abstractions can happen easily. Having a presenter class that can be accessed from model would not have that issue at all.
+Even though more typing is needed, I think it is good for establishing the awareness that presenter helpers are different to model methods.
 
-```ruby
-# app/models/blog_post.rb
-class BlogPost < ActiveRecord::Base
-  # published_at:datetime
-end
-
-# app/models/user.rb
-class User < ActiveRecord::Base
-  has_many :blog_posts
-end
-
-# app/decorators/blog_post_decorator.rb
-module BlogPostDecorator
-  def published_date
-    published_at.strftime("%Y.%m.%d")
-  end
-end
-
-# app/controllers/users_controller.rb
-class UsersController < ApplicationController
-  def index
-    @users = User.all
-  end
-end
-```
-
-```erb
-# app/views/users/index.html.erb
-<% @users.each do |user| %>
-  <%= render partial: "blog_post", locals: { blog_posts: user.blog_posts } %><br>
-<% end %>
-
-# app/views/users/_blog_post.html.erb
-<% blog_posts.each do |blog_post| %>
-  <%= blog_post.published_date %>
-<% end %>
-```
-
-## Configuring the decorator suffix
-
-By default, ActiveDecorator searches a decorator module named `target_class.name + "Decorator"`
-
-If you would like a different rule, you can configure in your initializer.
-
-```ruby
-ActiveDecorator.configure do |config|
-  config.decorator_suffix = 'Presenter'
-end
-```
-
-## Contributing to ActiveDecorator ##
+## Contribute ##
 
 * Fork, fix, then send me a pull request.
 
@@ -125,3 +65,4 @@ end
 ## Copyright ##
 
 Copyright (c) 2011 Akira Matsuda. See MIT-LICENSE for further details.
+

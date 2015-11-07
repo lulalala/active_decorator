@@ -1,8 +1,8 @@
 require 'active_decorator/view_context'
-require 'active_decorator/model'
+require 'lulalala_presenter/active_model_bridge'
 require 'rails'
 
-module ActiveDecorator
+module LulalalaPresenter
   class Railtie < ::Rails::Railtie
     initializer 'active_decorator' do
       ActiveSupport.on_load(:action_controller) do
@@ -15,7 +15,7 @@ module ActiveDecorator
         end
       end
       ActiveSupport.on_load(:active_record) do
-        ActiveRecord::Base.send :include, ActiveDecorator::Model
+        ActiveRecord::Base.send :include, LulalalaPresenter::ActiveModelBridge
       end
     end
   end

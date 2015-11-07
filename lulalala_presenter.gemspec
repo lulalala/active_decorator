@@ -1,17 +1,15 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "active_decorator/version"
+require "lulalala_presenter/version"
 
 Gem::Specification.new do |s|
-  s.name        = "active_decorator"
-  s.version     = ActiveDecorator::VERSION
-  s.authors     = ["Akira Matsuda"]
-  s.email       = ["ronnie@dio.jp"]
-  s.homepage    = 'https://github.com/amatsuda/active_decorator'
+  s.name        = "lulalala_presenter"
+  s.version     = LulalalaPresenter::VERSION
+  s.authors     = ["lulalala", "Akira Matsuda"]
+  s.email       = ["mark@goodlife.tw", "ronnie@dio.jp"]
+  s.homepage    = 'https://github.com/lulalala/lulalala_presenter'
   s.summary     = %q{A simple and Rubyish view helper for Rails}
   s.description = %q{A simple and Rubyish view helper for Rails}
-
-  s.rubyforge_project = "active_decorator"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
