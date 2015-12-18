@@ -6,12 +6,12 @@ require 'ostruct'
 require 'jbuilder'
 
 # config
-ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':memory:')
+ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
 
 module ActiveDecoratorTestApp
   class Application < Rails::Application
     config.secret_token = '"confusion" will be my epitaph.'
-    config.session_store :cookie_store, :key => '_myapp_session'
+    config.session_store :cookie_store, key: '_myapp_session'
     config.active_support.deprecation = :log
     config.eager_load = false
     config.action_dispatch.show_exceptions = false
@@ -24,15 +24,15 @@ ActiveDecoratorTestApp::Application.initialize!
 
 # routes
 ActiveDecoratorTestApp::Application.routes.draw do
-  resources :authors, :only => [:index, :show] do
-    resources :books, :only => [:index, :show] do
+  resources :authors, only: [:index, :show] do
+    resources :books, only: [:index, :show] do
       member do
         get :error
         post :purchase
       end
     end
   end
-  resources :movies, :only => :show
+  resources :movies, only: :show
 end
 
 # models
@@ -68,7 +68,7 @@ module BookDecorator
   end
 
   def link
-    link_to title, "#{request.protocol}#{request.host_with_port}/assets/sample.png", :class => 'title'
+    link_to title, "#{request.protocol}#{request.host_with_port}/assets/sample.png", class: 'title'
   end
 
   def cover_image
@@ -153,7 +153,7 @@ end
 class BookMailer < ActionMailer::Base
   def thanks(book)
     @book = book
-    mail :from => 'nobody@example.com', :to => 'test@example.com', :subject => 'Thanks'
+    mail from: 'nobody@example.com', to: 'test@example.com', subject: 'Thanks'
   end
 end
 
@@ -167,28 +167,14 @@ class CreateAllTables < ActiveRecord::Migration
 end
 
 # Proxy for ActiveRecord::Relation
-if RUBY_VERSION >= '1.9.0'
-  class RelationProxy < BasicObject
-    attr_accessor :ar_relation
+class RelationProxy < BasicObject
+  attr_accessor :ar_relation
 
-    def initialize(ar_relation)
-      @ar_relation = ar_relation
-    end
-
-    def method_missing(method, *args, &block)
-      @ar_relation.public_send(method, *args, &block)
-    end
+  def initialize(ar_relation)
+    @ar_relation = ar_relation
   end
-else
-  class RelationProxy < Object
-    attr_accessor :ar_relation
 
-    def initialize(ar_relation)
-      @ar_relation = ar_relation
-    end
-
-    def method_missing(method, *args, &block)
-      @ar_relation.send(method, *args, &block)
-    end
+  def method_missing(method, *args, &block)
+    @ar_relation.public_send(method, *args, &block)
   end
 end

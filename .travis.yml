@@ -1,17 +1,22 @@
 language: ruby
 
-script: bundle exec rake spec
+before_install: gem update bundler --no-document
+script: bundle exec rake test
 
 rvm:
   - 2.0.0
-  - 2.1
-  - 2.2.3
+  - 2.1.10
+  - 2.2.7
+  - 2.3.4
+  - 2.4.1
   - ruby-head
 gemfile:
   - gemfiles/Gemfile-rails.3.2.x
   - gemfiles/Gemfile-rails.4.0.x
   - gemfiles/Gemfile-rails.4.1.x
   - gemfiles/Gemfile-rails.4.2.x
+  - gemfiles/Gemfile-rails.5.0.x
+  - gemfiles/Gemfile-rails.5.1.x
 
 sudo: false
 
@@ -19,5 +24,26 @@ matrix:
   exclude:
     - rvm: ruby-head
       gemfile: gemfiles/Gemfile-rails.3.2.x
+    - rvm: ruby-head
+      gemfile: gemfiles/Gemfile-rails.4.0.x
+    - rvm: ruby-head
+      gemfile: gemfiles/Gemfile-rails.4.1.x
+    - rvm: 2.4.1
+      gemfile: gemfiles/Gemfile-rails.3.2.x
+    - rvm: 2.4.1
+      gemfile: gemfiles/Gemfile-rails.4.0.x
+    - rvm: 2.4.1
+      gemfile: gemfiles/Gemfile-rails.4.1.x
+    - rvm: 2.4.1
+      gemfile: gemfiles/Gemfile-rails.4.2.x
+    - rvm: 2.0.0
+      gemfile: gemfiles/Gemfile-rails.5.0.x
+    - rvm: 2.1.10
+      gemfile: gemfiles/Gemfile-rails.5.0.x
+    - rvm: 2.0.0
+      gemfile: gemfiles/Gemfile-rails.5.1.x
+    - rvm: 2.1.10
+      gemfile: gemfiles/Gemfile-rails.5.1.x
   allow_failures:
     - rvm: ruby-head
+    - gemfile: gemfiles/Gemfile-rails.5.1.x
