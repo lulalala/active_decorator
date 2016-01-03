@@ -5,16 +5,20 @@ require 'rails'
 module LulalalaPresenter
   class Railtie < ::Rails::Railtie
     initializer 'active_decorator' do
-      ActiveSupport.on_load(:action_controller) do
+      ActiveSupport.on_load :action_controller do
         require 'active_decorator/monkey/action_controller/base/rescue_from'
+        ActionController::Base.send :prepend, ActiveDecorator::Monkey::ActionController::Base
+
         ActionController::Base.send :include, ActiveDecorator::ViewContext::Filter
       end
-      ActiveSupport.on_load(:action_mailer) do
+
+      ActiveSupport.on_load :action_mailer do
         if ActionMailer::Base.respond_to? :before_action
           ActionMailer::Base.send :include, ActiveDecorator::ViewContext::Filter
         end
       end
-      ActiveSupport.on_load(:active_record) do
+
+      ActiveSupport.on_load :active_record do
         ActiveRecord::Base.send :include, LulalalaPresenter::ActiveModelBridge
       end
     end
