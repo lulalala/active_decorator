@@ -13,10 +13,11 @@ and this gem will solve it.
 
 ## Usage ##
 
-1. put `gem 'lulalala_presenter', github:'lulalala/lulalala_presenter'` in Gemfile and then `bundle install`.
-2. create a presenter class for each AR model you wish to present. For example, a decorator for a model `User` should be named `UserPresenter`.
+1. put `gem 'lulalala_presenter'` in Gemfile and then `bundle install`.
+2. create a presenter class for each AR model you wish to present. For example, a decorator for a model `User` should be named `UserPresenter`. In your helper methods:
+  1. call any ActionView's helper methods using `h`, e.g. `h.content_tag` or `h.link_to`.
+  2. call any model methods using `model`, e.g. `model.title`
 3. access this presenter from the model like this: `record.presenter`, and from there call the helper methods.
-2. call any ActionView's helper methods using `h`, e.g. `h.content_tag` or `h.link_to`.
 
 
 ## Examples ##
@@ -28,7 +29,7 @@ class User < ActiveRecord::Base
 end
 
 # app/presenters/user_presenter.rb
-module UserPresenter < LulalalaPresenter::Base
+class UserPresenter < LulalalaPresenter::Base
   def full_name
     "#{model.first_name} #{model.last_name}"
   end
