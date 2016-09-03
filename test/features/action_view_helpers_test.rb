@@ -4,7 +4,7 @@ class ActionViewHelpersTest < ActionDispatch::IntegrationTest
   setup do
     aamine = Author.create! name: 'aamine'
     @rhg = aamine.books.create! title: 'RHG'
-    @rhg_novel = aamine.books.create! title: 'RHG Novel', type: 'Novel'
+    @rhg_novel = aamine.books.create! title: 'RHG Novel'
   end
 
   test 'invoking action_view helper methods' do

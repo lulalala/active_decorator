@@ -1,2 +1,2 @@
 json.title          book.title
-json.reverse_title  book.reverse_title
+json.reverse_title  book.presenter.reverse_title

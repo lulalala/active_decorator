@@ -49,30 +49,30 @@ end
 module ApplicationHelper; end
 
 # decorators
-module AuthorDecorator
+class AuthorPresenter < LulalalaPresenter::Base
   def reverse_name
-    name.reverse
+    model.name.reverse
   end
 
   def capitalized_name
-    name.capitalize
+    model.name.capitalize
   end
 end
-module BookDecorator
+class BookPresenter < LulalalaPresenter::Base
   def reverse_title
-    title.reverse
+    model.title.reverse
   end
 
   def upcased_title
-    title.upcase
+    model.title.upcase
   end
 
   def link
-    link_to title, "#{request.protocol}#{request.host_with_port}/assets/sample.png", class: 'title'
+    h.link_to model.title, "#{h.request.protocol}#{h.request.host_with_port}/assets/sample.png", class: 'title'
   end
 
   def cover_image
-    image_tag 'cover.png'
+    h.image_tag 'cover.png'
   end
 
   def error
@@ -81,7 +81,7 @@ module BookDecorator
 end
 
 # decorator fake
-class MovieDecorator; end
+class MoviePresenter < LulalalaPresenter::Base; end
 
 # controllers
 class ApplicationController < ActionController::Base

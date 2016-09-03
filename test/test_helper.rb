@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'rails'
 
 # load the plugin
-require 'active_decorator'
+require 'lulalala_presenter'
 
 # needs to load the app next
 require 'fake_app/fake_app'
